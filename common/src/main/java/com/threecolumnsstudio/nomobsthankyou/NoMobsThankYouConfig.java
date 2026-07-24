@@ -56,8 +56,13 @@ public class NoMobsThankYouConfig {
             if (entry.endsWith(":*")) {
                 String namespace = entry.substring(0, entry.length() - 2);
                 for (EntityType<?> type : BuiltInRegistries.ENTITY_TYPE) {
-                    if (type.getCategory() == MobCategory.MISC) continue;
                     String id = BuiltInRegistries.ENTITY_TYPE.getKey(type).toString();
+                    if (type.getCategory() == MobCategory.MISC) {
+                        if (!id.equals("minecraft:villager") && !id.equals("minecraft:iron_golem")
+                            && !id.equals("minecraft:snow_golem")) {
+                            continue;
+                        }
+                    }
                     if (id.startsWith(namespace + ":")) {
                         toRemove.add(id);
                     }
@@ -187,7 +192,12 @@ public class NoMobsThankYouConfig {
             String id = BuiltInRegistries.ENTITY_TYPE.getKey(type).toString();
             MobCategory cat = type.getCategory();
             if (preset.equals("disableAllMobs") || preset.equals("villagersAllowed")) {
-                if (cat == MobCategory.MISC) continue;
+                if (cat == MobCategory.MISC) {
+                    if (!id.equals("minecraft:villager") && !id.equals("minecraft:iron_golem")
+                        && !id.equals("minecraft:snow_golem")) {
+                        continue;
+                    }
+                }
             }
             switch (preset) {
                 case "disableAllMobs":
