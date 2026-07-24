@@ -1,0 +1,21 @@
+plugins {
+    id 'net.fabricmc.fabric-loom-remap' version "${fabric_loom_version}"
+}
+
+loom {
+    runConfigs.clear()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+    withSourcesJar()
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+    // Gson is bundled with MC
+    compileOnly 'com.google.code.gson:gson:2.10.1'
+}
