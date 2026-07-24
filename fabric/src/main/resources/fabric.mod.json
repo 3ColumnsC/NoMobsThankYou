@@ -1,0 +1,32 @@
+{
+	"schemaVersion": 1,
+	"id": "nomobsthankyou",
+	"version": "${version}",
+	"name": "NoMobsThankYou",
+	"description": "Prevents unwanted mobs from spawning via JSON presets and override lists.",
+	"authors": [
+		"3C Team"
+	],
+	"contact": {
+		"homepage": "https://modrinth.com/mod/nomobsthankyou",
+		"issues": "https://github.com/3ColumnsC/NoMobsThankYou/issues",
+		"sources": "https://github.com/3ColumnsC/NoMobsThankYou"
+	},
+	"license": "MIT",
+	"icon": "assets/nomobsthankyou/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.threecolumnsstudio.nomobsthankyou.fabric.NoMobsThankYouFabric"
+		]
+	},
+	"mixins": [
+		"nomobsthankyou.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.19.3",
+		"minecraft": "~26.1.2",
+		"java": ">=21",
+		"fabric-api": ">=0.151.0"
+	}
+}

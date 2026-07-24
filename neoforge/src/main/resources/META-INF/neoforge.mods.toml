@@ -1,0 +1,28 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "MIT"
+
+[[mods]]
+modId = "nomobsthankyou"
+version = "${file.jarVersion}"
+displayName = "NoMobsThankYou"
+authors = "3C Team"
+description = "Prevents unwanted mobs from spawning via JSON presets and override lists."
+logoFile = "assets/nomobsthankyou/icon.png"
+
+[[mixins]]
+config = "nomobsthankyou.mixins.json"
+
+[[dependencies.nomobsthankyou]]
+modId = "neoforge"
+type = "required"
+versionRange = "[26.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.nomobsthankyou]]
+modId = "minecraft"
+type = "required"
+versionRange = "[26.1.2,)"
+ordering = "NONE"
+side = "BOTH"
