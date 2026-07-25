@@ -59,7 +59,7 @@ public class NoMobsThankYouConfig {
                     String id = BuiltInRegistries.ENTITY_TYPE.getKey(type).toString();
                     if (type.getCategory() == MobCategory.MISC) {
                         if (!id.equals("minecraft:villager") && !id.equals("minecraft:iron_golem")
-                            && !id.equals("minecraft:snow_golem")) {
+                            && !id.equals("minecraft:snow_golem") && !id.equals("minecraft:copper_golem")) {
                             continue;
                         }
                     }
@@ -194,7 +194,7 @@ public class NoMobsThankYouConfig {
             if (preset.equals("disableAllMobs") || preset.equals("villagersAllowed")) {
                 if (cat == MobCategory.MISC) {
                     if (!id.equals("minecraft:villager") && !id.equals("minecraft:iron_golem")
-                        && !id.equals("minecraft:snow_golem")) {
+                        && !id.equals("minecraft:snow_golem") && !id.equals("minecraft:copper_golem")) {
                         continue;
                     }
                 }
