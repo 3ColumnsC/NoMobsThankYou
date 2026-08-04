@@ -1,0 +1,12 @@
+{
+	"required": true,
+	"package": "com.threecolumnsstudio.nomobsthankyou.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"mixins": [
+		"MobCheckSpawnRulesMixin",
+		"ServerLevelMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
