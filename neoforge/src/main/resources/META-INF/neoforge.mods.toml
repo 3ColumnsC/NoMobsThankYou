@@ -1,6 +1,7 @@
 modLoader = "javafml"
 loaderVersion = "[4,)"
 license = "MIT"
+issueTrackerURL = "https://github.com/3ColumnsC/NoMobsThankYou/issues"
 
 [[mods]]
 modId = "nomobsthankyou"
@@ -8,7 +9,9 @@ version = "${file.jarVersion}"
 displayName = "NoMobsThankYou"
 authors = "3C Team"
 description = "Prevents unwanted mobs from spawning via JSON presets and override lists."
-logoFile = "assets/nomobsthankyou/icon.png"
+iconFile = "assets/nomobsthankyou/icon.png"
+bannerFile = "assets/nomobsthankyou/icon.png"
+displayURL = "https://modrinth.com/mod/nomobsthankyou"
 
 [[mixins]]
 config = "nomobsthankyou.mixins.json"

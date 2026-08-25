@@ -3,6 +3,7 @@ package com.threecolumnsstudio.nomobsthankyou.neoforge;
 import com.threecolumnsstudio.nomobsthankyou.NoMobsThankYouConfig;
 import com.threecolumnsstudio.nomobsthankyou.Platform;
 import com.threecolumnsstudio.nomobsthankyou.NoMobsThankYou;
+import com.threecolumnsstudio.nomobsthankyou.config.ConfigIO;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.permissions.Permissions;
@@ -12,7 +13,6 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
-import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 import java.util.List;
@@ -24,12 +24,6 @@ public class NoMobsThankYouNeoForge {
     public NoMobsThankYouNeoForge(IEventBus modEventBus) {
         Platform.set(new NeoforgePlatform());
         NoMobsThankYou.init();
-
-        NeoForge.EVENT_BUS.addListener(EntityJoinLevelEvent.class, event -> {
-            if (!event.loadedFromDisk() && NoMobsThankYouConfig.shouldRemove(event.getEntity().getType())) {
-                event.setCanceled(true);
-            }
-        });
 
         NeoForge.EVENT_BUS.addListener(PlayerEvent.PlayerLoggedInEvent.class, event -> {
             for (String error : NoMobsThankYouConfig.getLoadErrors()) {
@@ -110,7 +104,7 @@ public class NoMobsThankYouNeoForge {
                             .executes(ctx -> {
                                 NoMobsThankYou.openConfigFile(
                                     ctx.getSource(),
-                                    Platform.get().getConfigDir().resolve("nomobsthankyou-presets.json"),
+                                    Platform.get().getConfigDir().resolve(ConfigIO.PRESETS_FILE),
                                     "presets"
                                 );
                                 return 1;
@@ -120,7 +114,7 @@ public class NoMobsThankYouNeoForge {
                             .executes(ctx -> {
                                 NoMobsThankYou.openConfigFile(
                                     ctx.getSource(),
-                                    Platform.get().getConfigDir().resolve("nomobsthankyou-overrides.json"),
+                                    Platform.get().getConfigDir().resolve(ConfigIO.OVERRIDES_FILE),
                                     "overrides"
                                 );
                                 return 1;

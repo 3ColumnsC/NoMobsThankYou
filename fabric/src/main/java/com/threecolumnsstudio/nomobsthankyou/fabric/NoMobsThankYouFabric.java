@@ -3,6 +3,7 @@ package com.threecolumnsstudio.nomobsthankyou.fabric;
 import com.threecolumnsstudio.nomobsthankyou.NoMobsThankYouConfig;
 import com.threecolumnsstudio.nomobsthankyou.Platform;
 import com.threecolumnsstudio.nomobsthankyou.NoMobsThankYou;
+import com.threecolumnsstudio.nomobsthankyou.config.ConfigIO;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -100,7 +101,7 @@ public class NoMobsThankYouFabric implements ModInitializer {
                             .executes(ctx -> {
                                 NoMobsThankYou.openConfigFile(
                                     ctx.getSource(),
-                                    Platform.get().getConfigDir().resolve("nomobsthankyou-presets.json"),
+                                    Platform.get().getConfigDir().resolve(ConfigIO.PRESETS_FILE),
                                     "presets"
                                 );
                                 return 1;
@@ -110,7 +111,7 @@ public class NoMobsThankYouFabric implements ModInitializer {
                             .executes(ctx -> {
                                 NoMobsThankYou.openConfigFile(
                                     ctx.getSource(),
-                                    Platform.get().getConfigDir().resolve("nomobsthankyou-overrides.json"),
+                                    Platform.get().getConfigDir().resolve(ConfigIO.OVERRIDES_FILE),
                                     "overrides"
                                 );
                                 return 1;
