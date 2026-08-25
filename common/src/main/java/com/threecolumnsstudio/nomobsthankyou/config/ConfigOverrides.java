@@ -1,4 +1,4 @@
-package com.threecolumnsstudio.nomobsthankyou;
+package com.threecolumnsstudio.nomobsthankyou.config;
 
 import java.util.Collections;
 import java.util.List;
