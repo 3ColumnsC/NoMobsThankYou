@@ -8,6 +8,7 @@ version = "${file.jarVersion}"
 displayName = "NoMobsThankYou"
 authors = "3C Team"
 description = "Prevents unwanted mobs from spawning via JSON presets and override lists."
+displayURL = "https://modrinth.com/mod/nomobsthankyou"
 logoFile = "assets/nomobsthankyou/icon.png"
 
 [[mixins]]
