@@ -6,10 +6,9 @@ Prevents unwanted mobs from spawning in your Minecraft world. Configure via JSON
 
 ## Features
 
-- **6 presets**: `disableAllMobs`, `villagersAllowed`, `disableMonsters`, `disablePassiveMobs`, `disableVillagers`, `disableBosses`
+- **4 presets**: `disableAllMobs`, `onlyVillagers`, `disableVillagers`, `disableBosses`
 - **Override lists**: add or keep specific mobs with wildcard support (`minecraft:*`, `modid:*`)
 - **Runtime reload**: change config without restarting the server
-- **Lightweight**: no dependencies beyond what Minecraft already ships
 
 ## Commands
 
@@ -33,22 +32,18 @@ Two JSON files in `config/`:
 ```json
 {
   "disableAllMobs": false,
-  "villagersAllowed": false,
-  "disableMonsters": false,
-  "disablePassiveMobs": false,
+  "onlyVillagers": false,
   "disableVillagers": false,
   "disableBosses": false
 }
 ```
 
-| Preset | Blocks |
-|---|---|
-| `disableAllMobs` | Every living entity (hostile + passive + ambient + water mobs). |
-| `villagersAllowed` | Same as disableAllMobs, but villagers and wandering traders are preserved. |
-| `disableMonsters` | All hostile mobs: zombies, skeletons, creepers, spiders, etc. (MobCategory.MONSTER). |
-| `disablePassiveMobs` | Passive animals: cows, pigs, sheep, chickens, rabbits, foxes, bees, squid, fish, axolotls, etc. Wandering traders are preserved. |
-| `disableVillagers` | Villagers and wandering traders only. |
-| `disableBosses` | Wither, Ender Dragon, and Elder Guardian. |
+| Preset | Blocks                                                                               |
+|---|--------------------------------------------------------------------------------------|
+| `disableAllMobs` | All mobs (hostile, passive, ambient, water) + villagers and iron/snow/copper golems. |
+| `onlyVillagers` | Same as disableAllMobs, but villagers and wandering traders are preserved.           |
+| `disableVillagers` | Villagers and wandering traders only.                                                |
+| `disableBosses` | Wither, Ender Dragon, and Elder Guardian.                                            |
 
 > **Note:** Invalid JSON or values will reset to defaults and show a warning in chat.
 
