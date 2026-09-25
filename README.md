@@ -4,11 +4,15 @@ Prevents unwanted mobs from spawning in your Minecraft world. Configure via JSON
 
 > OP needed for commands.
 
+---
+
 ## ⚡ Features
 
 - **4 presets**: `disableAllMobs`, `onlyVillagers`, `disableVillagers`, `disableBosses`
 - **Override lists**: add or keep specific mobs with wildcard support (`minecraft:*`, `modid:*`)
 - **Runtime reload**: change config without restarting the server
+
+---
 
 ## 📁 Commands
 
@@ -20,6 +24,8 @@ Prevents unwanted mobs from spawning in your Minecraft world. Configure via JSON
 | `/nomobsthankyou clean list` | Clear override remove and keep lists (auto-reload) |
 | `/nomobsthankyou open presets` | Open presets config file |
 | `/nomobsthankyou open list` | Open override lists config file |
+
+---
 
 ## ⚙️ Configuration
 
