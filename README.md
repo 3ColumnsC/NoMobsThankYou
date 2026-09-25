@@ -4,13 +4,13 @@ Prevents unwanted mobs from spawning in your Minecraft world. Configure via JSON
 
 > OP needed for commands.
 
-## Features
+## ⚡ Features
 
 - **4 presets**: `disableAllMobs`, `onlyVillagers`, `disableVillagers`, `disableBosses`
 - **Override lists**: add or keep specific mobs with wildcard support (`minecraft:*`, `modid:*`)
 - **Runtime reload**: change config without restarting the server
 
-## Commands
+## 📁 Commands
 
 | Command | Description |
 |---|---|
@@ -21,7 +21,7 @@ Prevents unwanted mobs from spawning in your Minecraft world. Configure via JSON
 | `/nomobsthankyou open presets` | Open presets config file |
 | `/nomobsthankyou open list` | Open override lists config file |
 
-## Configuration
+## ⚙️ Configuration
 
 Two JSON files in `config/`:
 
@@ -69,6 +69,7 @@ Overrides are applied on top of the active preset.
 ### Fabric
 
 * Fabric API
+* Mod Menu (optional)
 * (+26.X) Java 25 or newer
 
 ### NeoForge
@@ -77,6 +78,19 @@ Overrides are applied on top of the active preset.
 
 ---
 
-## License
+## 💬 Suggestions & Issues
+
+If you have an idea, a suggestion, or found a bug, feel free to leave a comment on the CurseForge page or open an issue on the GitHub repository.
+
+---
+
+## ❓ FAQ
+
+**Can I use this mod in a public modpack?** <br>
+Yes! You're free to include it in any public or private modpack, no permission needed.
+
+---
+
+## 📜 License
 
 This project is licensed under the MIT License.
