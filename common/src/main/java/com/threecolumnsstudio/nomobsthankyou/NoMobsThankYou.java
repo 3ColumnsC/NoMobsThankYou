@@ -18,12 +18,16 @@ public final class NoMobsThankYou {
     private NoMobsThankYou() {}
 
     public static void init() {
-        NoMobsThankYouConfig.load();
         LOGGER.info("{} initialized", MOD_ID);
     }
 
     public static void openConfigFile(CommandSourceStack source, Path path, String configName) {
         String pathStr = path.toAbsolutePath().normalize().toString();
+
+        if (source.getServer().isDedicatedServer()) {
+            source.sendSuccess(() -> Component.literal("Config file: " + pathStr), false);
+            return;
+        }
 
         if (Desktop.isDesktopSupported()) {
             try {

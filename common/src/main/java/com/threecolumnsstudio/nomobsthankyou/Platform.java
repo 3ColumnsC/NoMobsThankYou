@@ -16,5 +16,5 @@ public interface Platform {
 }
 
 class PlatformHolder {
-    static Platform INSTANCE;
+    static volatile Platform INSTANCE;
 }
