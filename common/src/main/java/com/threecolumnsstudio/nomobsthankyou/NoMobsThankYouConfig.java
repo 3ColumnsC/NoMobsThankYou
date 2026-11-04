@@ -17,9 +17,10 @@ import java.util.Set;
 
 public class NoMobsThankYouConfig {
 
-    private static volatile Set<String> entitiesToRemove = Collections.emptySet();
+    private static volatile Set<ResourceLocation> entitiesToRemove = Collections.emptySet();
     private static volatile ConfigOverrides loadedOverrides = new ConfigOverrides();
     private static volatile String activePresetName = null;
+    private static volatile boolean enabled = true;
     private static volatile boolean loaded = false;
     private static volatile List<String> loadErrors = Collections.emptyList();
 
@@ -28,7 +29,7 @@ public class NoMobsThankYouConfig {
     public static boolean shouldRemove(EntityType<?> type) {
         if (!loaded) return false;
         ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(type);
-        return key != null && entitiesToRemove.contains(key.toString());
+        return key != null && entitiesToRemove.contains(key);
     }
 
     public static void load() {
@@ -39,19 +40,31 @@ public class NoMobsThankYouConfig {
         ConfigPresets presets = ConfigIO.readPresets(configDir, errors);
         ConfigOverrides overrides = ConfigIO.readOverrides(configDir, errors);
 
-        Set<String> toRemove = new HashSet<>();
-        Preset activePreset = activePreset(presets);
+        boolean isEnabled = !Boolean.FALSE.equals(presets.enabled);
+        Set<ResourceLocation> toRemove = new HashSet<>();
+        Preset activePreset = isEnabled ? activePreset(presets, errors) : null;
+
         if (activePreset != null) {
             toRemove.addAll(activePreset.blockedEntityIds());
         }
-        applyRemoveOverrides(overrides.remove, toRemove);
-        applyKeepOverrides(overrides.keep, toRemove);
+        applyRemoveOverrides(overrides.remove, toRemove, errors);
+        applyKeepOverrides(overrides.keep, toRemove, errors);
+
+        if (!isEnabled) {
+            toRemove.clear();
+        }
 
         entitiesToRemove = Collections.unmodifiableSet(toRemove);
         loadedOverrides = overrides;
+        enabled = isEnabled;
         activePresetName = activePreset != null ? activePreset.jsonKey() : null;
         loadErrors = Collections.unmodifiableList(new ArrayList<>(errors));
         loaded = true;
+
+        if (!isEnabled) {
+            NoMobsThankYou.LOGGER.info("NoMobsThankYou is disabled via config");
+            return;
+        }
 
         NoMobsThankYou.LOGGER.info("Blocking {} entities from spawning", toRemove.size());
         if (activePreset != null) {
@@ -73,7 +86,7 @@ public class NoMobsThankYouConfig {
         load();
     }
 
-    private static Preset activePreset(ConfigPresets presets) {
+    private static Preset activePreset(ConfigPresets presets, List<String> errors) {
         List<Preset> active = new ArrayList<>();
         if (Boolean.TRUE.equals(presets.disableAllMobs)) active.add(Preset.DISABLE_ALL_MOBS);
         if (Boolean.TRUE.equals(presets.onlyVillagers)) active.add(Preset.ONLY_VILLAGERS);
@@ -83,43 +96,98 @@ public class NoMobsThankYouConfig {
         if (active.size() > 1) {
             String names = String.join(", ", active.stream().map(Preset::jsonKey).toList());
             NoMobsThankYou.LOGGER.warn("Multiple presets active ({}). No preset will be applied.", names);
+            errors.add("Multiple presets active (" + names + "), none applied");
             return null;
         }
         return active.isEmpty() ? null : active.get(0);
     }
 
-    private static void applyRemoveOverrides(List<String> remove, Set<String> toRemove) {
+    private static void applyRemoveOverrides(List<String> remove, Set<ResourceLocation> toRemove, List<String> errors) {
         for (String entry : remove) {
-            if (entry.endsWith(":*")) {
-                String namespace = entry.substring(0, entry.length() - 2);
+            if (entry.equals("*")) {
                 for (EntityType<?> type : BuiltInRegistries.ENTITY_TYPE) {
-                    String id = BuiltInRegistries.ENTITY_TYPE.getKey(type).toString();
-                    if (Preset.isExcludedMisc(type, id)) {
+                    ResourceLocation id = BuiltInRegistries.ENTITY_TYPE.getKey(type);
+                    if (id == null || Preset.isExcludedMisc(type, id.toString())) {
                         continue;
                     }
-                    if (id.startsWith(namespace + ":")) {
+                    toRemove.add(id);
+                }
+            } else if (entry.endsWith(":*")) {
+                String namespace = entry.substring(0, entry.length() - 2);
+                if (!validateNamespace(namespace, errors)) {
+                    continue;
+                }
+                for (EntityType<?> type : BuiltInRegistries.ENTITY_TYPE) {
+                    ResourceLocation id = BuiltInRegistries.ENTITY_TYPE.getKey(type);
+                    if (id == null || Preset.isExcludedMisc(type, id.toString())) {
+                        continue;
+                    }
+                    if (id.getNamespace().equals(namespace)) {
                         toRemove.add(id);
                     }
                 }
             } else {
-                toRemove.add(entry);
+                ResourceLocation id = parseEntityId(entry, errors);
+                if (id != null) {
+                    toRemove.add(id);
+                }
             }
         }
     }
 
-    private static void applyKeepOverrides(List<String> keep, Set<String> toRemove) {
+    private static void applyKeepOverrides(List<String> keep, Set<ResourceLocation> toRemove, List<String> errors) {
         for (String entry : keep) {
-            if (entry.endsWith(":*")) {
+            if (entry.equals("*")) {
+                toRemove.clear();
+            } else if (entry.endsWith(":*")) {
                 String namespace = entry.substring(0, entry.length() - 2);
-                toRemove.removeIf(id -> id.startsWith(namespace + ":"));
+                if (!validateNamespace(namespace, errors)) {
+                    continue;
+                }
+                toRemove.removeIf(id -> id.getNamespace().equals(namespace));
             } else {
-                toRemove.remove(entry);
+                ResourceLocation id = parseEntityId(entry, errors);
+                if (id != null) {
+                    toRemove.remove(id);
+                }
             }
         }
+    }
+
+    private static ResourceLocation parseEntityId(String entry, List<String> errors) {
+        ResourceLocation id = ResourceLocation.tryParse(entry);
+        if (id == null) {
+            errors.add("Invalid entity id '" + entry + "'");
+            return null;
+        }
+        if (!BuiltInRegistries.ENTITY_TYPE.containsKey(id)) {
+            errors.add("Unknown entity id '" + entry + "'");
+            return null;
+        }
+        return id;
+    }
+
+    private static boolean validateNamespace(String namespace, List<String> errors) {
+        if (namespace.isEmpty() || ResourceLocation.tryParse(namespace + ":probe") == null) {
+            errors.add("Invalid namespace '" + namespace + "'");
+            return false;
+        }
+
+        boolean exists = BuiltInRegistries.ENTITY_TYPE.keySet().stream()
+                .anyMatch(id -> id.getNamespace().equals(namespace));
+        if (!exists) {
+            errors.add("Unknown namespace '" + namespace + "'");
+            return false;
+        }
+        return true;
     }
 
     public static boolean isLoaded() {
         return loaded;
+    }
+
+    public static boolean isEnabled() {
+        return enabled;
     }
 
     public static String getActivePresetName() {

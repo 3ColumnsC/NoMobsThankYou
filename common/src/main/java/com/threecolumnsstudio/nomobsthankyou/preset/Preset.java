@@ -1,6 +1,7 @@
 package com.threecolumnsstudio.nomobsthankyou.preset;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
@@ -49,11 +50,11 @@ public enum Preset {
 
     public abstract boolean blocks(EntityType<?> type, String id);
 
-    public Set<String> blockedEntityIds() {
-        Set<String> blocked = new HashSet<>();
+    public Set<ResourceLocation> blockedEntityIds() {
+        Set<ResourceLocation> blocked = new HashSet<>();
         for (EntityType<?> type : BuiltInRegistries.ENTITY_TYPE) {
-            String id = BuiltInRegistries.ENTITY_TYPE.getKey(type).toString();
-            if (blocks(type, id)) {
+            ResourceLocation id = BuiltInRegistries.ENTITY_TYPE.getKey(type);
+            if (id != null && blocks(type, id.toString())) {
                 blocked.add(id);
             }
         }
@@ -66,7 +67,6 @@ public enum Preset {
         }
         return !id.equals("minecraft:villager")
                 && !id.equals("minecraft:iron_golem")
-                && !id.equals("minecraft:snow_golem")
-                && !id.equals("minecraft:copper_golem");
+                && !id.equals("minecraft:snow_golem");
     }
 }
