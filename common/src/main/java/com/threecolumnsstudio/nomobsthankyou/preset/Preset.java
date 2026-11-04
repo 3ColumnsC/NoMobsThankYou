@@ -1,6 +1,7 @@
 package com.threecolumnsstudio.nomobsthankyou.preset;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
@@ -49,11 +50,11 @@ public enum Preset {
 
     public abstract boolean blocks(EntityType<?> type, String id);
 
-    public Set<String> blockedEntityIds() {
-        Set<String> blocked = new HashSet<>();
+    public Set<Identifier> blockedEntityIds() {
+        Set<Identifier> blocked = new HashSet<>();
         for (EntityType<?> type : BuiltInRegistries.ENTITY_TYPE) {
-            String id = BuiltInRegistries.ENTITY_TYPE.getKey(type).toString();
-            if (blocks(type, id)) {
+            Identifier id = BuiltInRegistries.ENTITY_TYPE.getKey(type);
+            if (id != null && blocks(type, id.toString())) {
                 blocked.add(id);
             }
         }

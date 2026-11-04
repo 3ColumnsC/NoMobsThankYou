@@ -1,6 +1,7 @@
 package com.threecolumnsstudio.nomobsthankyou.config;
 
 public class ConfigPresets {
+    public Boolean enabled = null;
     public Boolean disableAllMobs = null;
     public Boolean onlyVillagers = null;
     public Boolean disableVillagers = null;
